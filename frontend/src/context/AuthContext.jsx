@@ -9,7 +9,7 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // Check if user is logged in on mount
+    
     useEffect(() => {
         const checkUser = async () => {
             const token = localStorage.getItem('token');
@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }) => {
     const login = async (email, password) => {
         const { data } = await api.post('/auth/login', { email, password });
         localStorage.setItem('token', data.token);
-        // Fetch full user data after login
+        
         const meRes = await api.get('/auth/me');
         setUser(meRes.data.data);
         return data;

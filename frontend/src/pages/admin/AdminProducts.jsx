@@ -72,7 +72,7 @@ const AdminProducts = () => {
                                 <td style={{ padding: '1rem' }}>₹{product.price}</td>
                                 <td style={{ padding: '1rem' }}>{product.category}</td>
                                 <td style={{ padding: '1rem' }}>
-                                    {/* Calculate total stock across sizes if applicable, or just show 'In Stock' */}
+                                    {}
                                     {product.sizes && product.sizes.length > 0
                                         ? product.sizes.reduce((acc, s) => acc + s.stock, 0)
                                         : 'N/A'}

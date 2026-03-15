@@ -57,12 +57,12 @@ const Cart = () => {
                     }
                 }
 
-                // Calculate price again to be safe
+                
                 const sizeObj = item.product.sizes.find(s => s.label === item.size);
-                // Use size price if it exists and is greater than 0, otherwise use base price
+                
                 const calculatedPrice = (sizeObj && sizeObj.price > 0) ? sizeObj.price : item.product.price;
 
-                // Construct backend-ready item
+                
                 return {
                     product: item.product._id,
                     name: item.product.name,
@@ -93,7 +93,7 @@ const Cart = () => {
 
             alert('Order Placed Successfully!');
             clearCart();
-            navigate('/'); // Redirect to Home or Order Success
+            navigate('/'); 
 
         } catch (error) {
             console.error("Checkout failed", error);
@@ -122,12 +122,12 @@ const Cart = () => {
             <h1 style={{ marginBottom: '2rem' }}>Shopping Cart</h1>
 
             <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '2rem' }}>
-                {/* Items List */}
+                {}
                 <div>
                     <h3 style={{ marginBottom: '1rem' }}>Cart Items</h3>
                     {cartItems.map((item) => {
                         const sizeObj = item.product.sizes.find(s => s.label === item.size);
-                        // Use size price if it exists and is greater than 0, otherwise use base price
+                        
                         const price = (sizeObj && sizeObj.price > 0) ? sizeObj.price : item.product.price;
 
                         return (
@@ -139,7 +139,7 @@ const Cart = () => {
                                     <h4>{item.product.name}</h4>
                                     <p style={{ color: 'var(--color-text-light)', fontSize: '0.9rem' }}>Size: {item.size}</p>
 
-                                    {/* Show Customization Preview */}
+                                    {}
                                     {item.customization && (item.customization.text || item.customization.file) && (
                                         <div style={{ marginTop: '0.5rem', fontSize: '0.8rem', background: '#fafafa', padding: '5px' }}>
                                             {item.customization.text && <p>Note: {item.customization.text}</p>}
@@ -164,9 +164,9 @@ const Cart = () => {
                     })}
                 </div>
 
-                {/* Checkout Section */}
+                {}
                 <div>
-                    {/* Shipping Form */}
+                    {}
                     <div style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '8px', boxShadow: '0 2px 10px rgba(0,0,0,0.05)', marginBottom: '1rem' }}>
                         <h3 style={{ marginBottom: '1rem', fontSize: '1.1rem' }}>Shipping Details</h3>
                         <div style={{ display: 'grid', gap: '1rem' }}>
@@ -181,7 +181,7 @@ const Cart = () => {
                         </div>
                     </div>
 
-                    {/* Summary */}
+                    {}
                     <div style={{ backgroundColor: 'var(--color-surface)', padding: '2rem', height: 'fit-content' }}>
                         <h3>Order Summary</h3>
                         <div style={{ display: 'flex', justifyContent: 'space-between', margin: '1rem 0' }}>

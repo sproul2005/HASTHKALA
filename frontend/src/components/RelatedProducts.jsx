@@ -12,8 +12,8 @@ const RelatedProducts = ({ currentProductId }) => {
     useEffect(() => {
         const fetchRelatedProducts = async () => {
             try {
-                // Fetching all products and filtering out the current one for now.
-                // In a real app, this might be a specific endpoint for related items.
+                
+                
                 const response = await api.get('/products');
                 const allProducts = response.data.products || [];
                 const related = allProducts.filter(p => p._id !== currentProductId).slice(0, 8);
@@ -88,7 +88,7 @@ const RelatedProducts = ({ currentProductId }) => {
                                 <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#9ca3af' }}>No Image</div>
                             )}
                             <button
-                                onClick={(e) => { e.stopPropagation(); /* Add to wishlist logic if desired */ }}
+                                onClick={(e) => { e.stopPropagation();  }}
                                 style={{
                                     position: 'absolute',
                                     bottom: '10px',
@@ -122,7 +122,7 @@ const RelatedProducts = ({ currentProductId }) => {
                     </div>
                 ))}
             </div>
-            {/* Custom styles to hide scrollbar across browsers */}
+            {}
             <style>{`
                 div::-webkit-scrollbar {
                     display: none;

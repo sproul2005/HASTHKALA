@@ -8,9 +8,9 @@ const Profile = () => {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
 
-    const [activeTab, setActiveTab] = useState('orders'); // 'orders', 'profile'
+    const [activeTab, setActiveTab] = useState('orders'); 
 
-    // Profile State
+    
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
@@ -58,8 +58,8 @@ const Profile = () => {
         try {
             await api.put('/auth/updatedetails', { name, email });
             alert("Profile updated successfully! Please log in again to see changes.");
-            // Ideally update the context, but for simplicity we can just log them out to force a refresh
-            // or we could add an updateUser method to AuthContext.
+            
+            
         } catch (error) {
             alert(error.response?.data?.error || "Failed to update profile");
         } finally {
@@ -91,7 +91,7 @@ const Profile = () => {
             </div>
 
             <div className="profile-layout">
-                {/* Sidebar Navigation */}
+                {}
                 <div className="profile-sidebar">
                     {user?.role !== 'admin' && (
                         <button
@@ -125,7 +125,7 @@ const Profile = () => {
                     </button>
                 </div>
 
-                {/* Main Content Area */}
+                {}
                 <div>
                     {activeTab === 'orders' && user?.role !== 'admin' && (
                         <div>

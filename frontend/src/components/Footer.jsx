@@ -16,7 +16,7 @@ const Footer = () => {
                 gap: '3rem',
                 marginBottom: '3rem'
             }}>
-                {/* Brand Section */}
+                {}
                 <div>
                     <h3 style={{
                         color: 'white',
@@ -31,7 +31,7 @@ const Footer = () => {
                         Curating the finest handcrafted treasures. We bring you products that tell a story, crafted with love and tradition.
                     </p>
 
-                    {/* Social Icons */}
+                    {}
                     <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem' }}>
                         <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" style={{ color: '#aaa', transition: 'color 0.2s', padding: '8px', background: 'rgba(255,255,255,0.05)', borderRadius: '50%' }}>
                             <Facebook size={20} className="hover:text-white" />
@@ -48,7 +48,7 @@ const Footer = () => {
                     </div>
                 </div>
 
-                {/* Quick Links */}
+                {}
                 <div>
                     <h4 style={{ color: 'white', marginBottom: '1.5rem', fontSize: '1.1rem', fontWeight: 600 }}>Quick Links</h4>
                     <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
@@ -59,7 +59,7 @@ const Footer = () => {
                     </ul>
                 </div>
 
-                {/* Contact Info */}
+                {}
                 <div>
                     <h4 style={{ color: 'white', marginBottom: '1.5rem', fontSize: '1.1rem', fontWeight: 600 }}>Contact Us</h4>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>

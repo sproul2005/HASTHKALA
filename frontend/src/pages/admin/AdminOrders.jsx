@@ -24,7 +24,7 @@ const AdminOrders = () => {
     const updateStatus = async (id, status) => {
         try {
             await api.put(`/orders/admin/order/${id}`, { status });
-            fetchOrders(); // Refresh
+            fetchOrders(); 
             alert("Order status updated");
         } catch (error) {
             console.error("Update failed", error);
@@ -116,7 +116,7 @@ const AdminOrders = () => {
                                                             <p style={{ fontWeight: 600 }}>{item.name}</p>
                                                             <p style={{ fontSize: '0.9rem' }}>Size: {item.size} | Qty: {item.quantity}</p>
 
-                                                            {/* Customization Details */}
+                                                            {}
                                                             {item.customization && (item.customization.text || item.customization.image) && (
                                                                 <div style={{ marginTop: '0.5rem', padding: '0.5rem', backgroundColor: '#fff', border: '1px dashed #ccc', borderRadius: '4px' }}>
                                                                     <strong>Customization:</strong>

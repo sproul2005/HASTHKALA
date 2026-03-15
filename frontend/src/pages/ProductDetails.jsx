@@ -21,7 +21,7 @@ const ProductDetails = () => {
     const [reviews, setReviews] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // Purchase State
+    
     const [selectedSize, setSelectedSize] = useState('');
     const [quantity, setQuantity] = useState(1);
     const [customText, setCustomText] = useState('');
@@ -89,7 +89,7 @@ const ProductDetails = () => {
                 console.log("Error sharing", error);
             }
         } else {
-            // Fallback for browsers that do not support Web Share API
+            
             navigator.clipboard.writeText(window.location.href);
             alert("Product link copied to clipboard!");
         }
@@ -140,16 +140,16 @@ const ProductDetails = () => {
                 </button>
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 'clamp(2rem, 5vw, 4rem)', marginBottom: '1.5rem' }}>
-                    {/* Image Gallery */}
-                        {/* Swipeable Image Gallery */}
+                    {}
+                        {}
                         <div style={{ position: 'relative', marginBottom: '1rem' }}>
                             <div style={{
                                 display: 'flex',
                                 overflowX: 'auto',
                                 scrollSnapType: 'x mandatory',
                                 WebkitOverflowScrolling: 'touch',
-                                scrollbarWidth: 'none', /* Firefox */
-                                msOverflowStyle: 'none',  /* Internet Explorer 10+ */
+                                scrollbarWidth: 'none', 
+                                msOverflowStyle: 'none',  
                             }} className="hide-scrollbar">
                                 {product.images.length > 0 ? (
                                     product.images.map((img, idx) => (
@@ -168,7 +168,7 @@ const ProductDetails = () => {
                             </div>
                         </div>
 
-                    {/* Product Info */}
+                    {}
                     <div>
                         <h1 style={{ fontSize: 'clamp(2rem, 5vw, 2.8rem)', marginBottom: '0.5rem', fontFamily: 'serif', color: '#0f172a', fontWeight: 500 }}>{product.name}</h1>
 
@@ -183,7 +183,7 @@ const ProductDetails = () => {
                             </span>
                         </div>
 
-                        {/* Variants / Size Selector */}
+                        {}
                         <div style={{ marginBottom: '2rem' }}>
                             <h4 style={{ marginBottom: '0.8rem', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 700, fontFamily: 'serif', color: '#0f172a' }}>Variants</h4>
                             <div style={{ display: 'flex', gap: '0.8rem', flexWrap: 'wrap' }}>
@@ -211,25 +211,25 @@ const ProductDetails = () => {
                             </div>
                         </div>
 
-                        {/* Price Setup matching screenshot with "20% OFF" mock badge */}
+                        {}
                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2.5rem' }}>
                             <span style={{ fontSize: 'clamp(2rem, 5vw, 2.6rem)', fontWeight: 600, color: '#0f172a', lineHeight: 1 }}>₹{activeSizePrice}</span>
                             <span style={{ fontSize: '1.2rem', textDecoration: 'line-through', color: '#9ca3af', fontWeight: 500 }}>₹{Math.round(activeSizePrice * 1.25)}</span>
                             <span style={{ backgroundColor: '#5b4ae3', color: 'white', padding: '4px 12px', borderRadius: '14px', fontSize: '0.85rem', fontWeight: 600, letterSpacing: '0.5px' }}>20% OFF</span>
                         </div>
 
-                        {/* Description Block */}
+                        {}
                         <div style={{ marginBottom: '1.2rem' }}>
                             <h4 style={{ fontSize: '1.25rem', marginBottom: '0.6rem', color: '#0f172a', fontFamily: 'serif', fontWeight: 500 }}>Description</h4>
                             <ul style={{ color: '#374151', lineHeight: '1.5', paddingLeft: '1.2rem', margin: 0, fontSize: '1rem' }}>
-                                {/* Splitting standard description into bullet points for the screenshot aesthetic if separated by newlines, else single bullet */}
+                                {}
                                 {product.description.split('\n').filter(p => p.trim() !== '').map((paragraph, i) => (
                                     <li key={i} style={{ marginBottom: '0.4rem' }}>{paragraph}</li>
                                 ))}
                             </ul>
                         </div>
 
-                        {/* Trust Badges matching screenshot */}
+                        {}
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem', padding: '1.2rem', backgroundColor: '#f8fafc', borderRadius: '8px' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#1e293b', fontSize: '0.9rem' }}>
                                 <Truck size={18} color="#3b82f6" /> Free Shipping
@@ -245,7 +245,7 @@ const ProductDetails = () => {
                             </div>
                         </div>
 
-                        {/* Action Buttons (Desktop) */}
+                        {}
                         <div style={{ display: 'flex', gap: '0.8rem', flexWrap: 'wrap', alignItems: 'center' }}>
                             {product.customizationType === 'none' && (
                                 <div style={{ display: 'flex', border: '1px solid #d1d5db', alignItems: 'center', borderRadius: '4px', backgroundColor: 'white', height: '48px' }}>
@@ -267,7 +267,7 @@ const ProductDetails = () => {
                     </div>
                 </div>
 
-                {/* Reviews Section */}
+                {}
                 <div style={{ borderTop: '1px solid #e5e7eb', paddingTop: '1.5rem', marginTop: '1rem', paddingBottom: '0.5rem' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', marginBottom: '1.5rem', gap: '1rem' }}>
                         <h2 style={{ fontSize: '2.2rem', margin: 0, fontFamily: 'serif', color: '#0f172a', fontWeight: 400 }}>Customer Reviews</h2>
@@ -309,7 +309,7 @@ const ProductDetails = () => {
                     </div>
                 </div>
 
-                {/* Write a Review Modal */}
+                {}
                 {isReviewModalOpen && (
                     <div
                         onClick={() => setIsReviewModalOpen(false)}
@@ -382,12 +382,12 @@ const ProductDetails = () => {
                     </div>
                 )}
 
-                {/* Recommended Products Slider */}
+                {}
                 <div style={{ paddingBottom: '0' }}>
                     <RelatedProducts currentProductId={product._id} />
                 </div>
 
-                {/* Sticky Mobile Action Bar */}
+                {}
                 <div className="mobile-sticky-action-bar">
                     <button onClick={handleShare} style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', background: '#e5e7eb', border: 'none', color: '#1f2937', fontWeight: 500, padding: '12px', borderRadius: '4px' }}>
                         <Share2 size={18} /> Share
@@ -433,7 +433,7 @@ const ProductDetails = () => {
                 }
             `}</style>
             </div>
-            {/* Added a mobile spacer before footer to avoid content overlapping by sticky bar but let footer sit flush at bottom */}
+            {}
             <div className="mobile-only-spacer" style={{ height: '80px', display: 'none' }}></div>
             <style>{`@media (max-width: 768px) { .mobile-only-spacer { display: block !important; } }`}</style>
             <Footer />

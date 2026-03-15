@@ -47,7 +47,7 @@ const MyOrders = () => {
                 <div style={{ display: 'grid', gap: '1.5rem' }}>
                     {orders.map(order => (
                         <div key={order._id} style={{ border: '1px solid #eee', borderRadius: '8px', overflow: 'hidden', backgroundColor: 'white' }}>
-                            {/* Header */}
+                            {}
                             <div style={{ backgroundColor: 'var(--color-surface)', padding: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
                                 <div>
                                     <span style={{ fontWeight: 600, marginRight: '1rem' }}>Order #{order._id.substring(0, 8)}</span>
@@ -70,7 +70,7 @@ const MyOrders = () => {
                                 </div>
                             </div>
 
-                            {/* Items */}
+                            {}
                             <div style={{ padding: '1rem' }}>
                                 {order.orderItems.map((item, idx) => (
                                     <div key={idx} style={{ display: 'flex', gap: '1rem', marginBottom: idx !== order.orderItems.length - 1 ? '1rem' : 0 }}>

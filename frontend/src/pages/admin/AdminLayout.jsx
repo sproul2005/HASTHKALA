@@ -21,7 +21,7 @@ const AdminLayout = () => {
 
     return (
         <div style={{ display: 'flex', minHeight: '100vh' }}>
-            {/* Sidebar */}
+            {}
             <aside style={{ width: '250px', backgroundColor: 'var(--color-primary)', color: 'white', padding: '2rem' }}>
                 <h2 style={{ fontSize: '1.5rem', marginBottom: '3rem', fontFamily: 'var(--font-heading)' }}>Admin Panel</h2>
 
@@ -66,7 +66,7 @@ const AdminLayout = () => {
                 </nav>
             </aside>
 
-            {/* Main Content */}
+            {}
             <main style={{ flex: 1, backgroundColor: 'var(--color-surface)', padding: '2rem', overflowY: 'auto' }}>
                 <Outlet />
             </main>

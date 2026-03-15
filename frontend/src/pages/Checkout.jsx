@@ -10,13 +10,13 @@ const Checkout = () => {
     const navigate = useNavigate();
     const { user } = useAuth();
 
-    // State passed from "Buy Now"
+    
     const { product, selectedSize, quantity } = location.state || {};
 
     const [currentStep, setCurrentStep] = useState(1);
     const [loading, setLoading] = useState(false);
 
-    // Form States
+    
     const [shippingAddress, setShippingAddress] = useState({
         fullName: user?.name || '',
         address: '',
@@ -69,12 +69,12 @@ const Checkout = () => {
                 return;
             }
         }
-        // Skip Customization step if the product doesn't allow any
+        
         if (currentStep === 2 && product.customizationType === 'none') {
             setCurrentStep(4);
             return;
         }
-        // Customization Validation (Step 3)
+        
         if (currentStep === 3 && product.customizationType !== 'none') {
             if ((product.customizationType === 'text' || product.customizationType === 'both') && !customText.trim()) {
                 alert("Please provide the custom text/name required for this product.");
@@ -94,7 +94,7 @@ const Checkout = () => {
         setLoading(true);
 
         try {
-            // Upload images sequentially if any exist
+            
             let uploadedImageUrls = [];
             if (customImages.length > 0) {
                 for (const img of customImages) {
@@ -107,9 +107,9 @@ const Checkout = () => {
                 }
             }
 
-            // In our current backend model, customization has a single 'image' string.
-            // If we have multiple, we could join them via comma, or update backend later.
-            // For now, joining them as comma separated strings so they save into the existing DB schema.
+            
+            
+            
             const joinedImageUrls = uploadedImageUrls.join(',');
 
             const orderItems = [{
@@ -139,7 +139,7 @@ const Checkout = () => {
             const { data: orderResponse } = await api.post('/orders/new', orderData);
             const createdOrderId = orderResponse.order._id;
 
-            // Fetch Razorpay Key
+            
             let keyResponse;
             try {
                 const res = await api.get('/payment/key');
@@ -148,7 +148,7 @@ const Checkout = () => {
                 console.warn('Razorpay key fetch failed:', err);
             }
 
-            // Create Razorpay Order
+            
             let rpOrderResponse;
             try {
                 const res = await api.post('/payment/checkout', { amount: totalAmount });
@@ -161,14 +161,14 @@ const Checkout = () => {
                 return;
             }
 
-            // Initialize Razorpay Options
+            
             const options = {
                 key: keyResponse.key,
                 amount: rpOrderResponse.order.amount,
                 currency: "INR",
                 name: "Hasthkala",
                 description: `Purchase of ${product.name}`,
-                image: "https://res.cloudinary.com/hasthkala/image/upload/v1/logo", // Optional logo fallback
+                image: "https://res.cloudinary.com/hasthkala/image/upload/v1/logo", 
                 order_id: rpOrderResponse.order.id,
                 handler: async function (response) {
                     try {
@@ -222,7 +222,7 @@ const Checkout = () => {
         { id: 4, label: 'Payment', icon: <CreditCard size={18} /> }
     ];
 
-    // Filter out Custom Details step if product isn't customizable
+    
     const activeSteps = product.customizationType === 'none'
         ? steps.filter(s => s.id !== 3)
         : steps;
@@ -321,7 +321,7 @@ const Checkout = () => {
                     <p style={{ color: '#555', fontSize: '1.1rem' }}>Fill in your details and customize your order</p>
                 </div>
 
-                {/* Progress Stepper */}
+                {}
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem', width: '100%', paddingBottom: '0.5rem' }}>
                     {activeSteps.map((step, index) => (
                         <React.Fragment key={step.id}>
@@ -332,7 +332,7 @@ const Checkout = () => {
                                 gap: '0.3rem',
                                 opacity: currentStep >= step.id ? 1 : 0.5,
                                 flex: 1,
-                                minWidth: '0' // Allows shrinking below max-content
+                                minWidth: '0' 
                             }}>
                                 <div style={{
                                     width: '32px', height: '32px',
@@ -342,7 +342,7 @@ const Checkout = () => {
                                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                                     color: currentStep >= step.id ? 'white' : '#888'
                                 }}>
-                                    {/* using smaller icons inside */}
+                                    {}
                                     {React.cloneElement(step.icon, { size: 14 })}
                                 </div>
                                 <span style={{ fontSize: 'clamp(0.65rem, 2vw, 0.85rem)', fontWeight: 500, color: currentStep >= step.id ? '#1d4ed8' : '#888', textAlign: 'center', lineHeight: '1.2' }}>
@@ -356,7 +356,7 @@ const Checkout = () => {
                     ))}
                 </div>
 
-                {/* Main Content Area */}
+                {}
                 <div style={{ maxWidth: '800px', margin: '0 auto', backgroundColor: 'white', borderRadius: '12px', boxShadow: '0 4px 20px rgba(0,0,0,0.05)', overflow: 'hidden' }}>
 
                     <AnimatePresence mode='wait'>
@@ -368,16 +368,16 @@ const Checkout = () => {
                             transition={{ duration: 0.3 }}
                             style={{ padding: 'clamp(1.5rem, 4vw, 3rem)' }}
                         >
-                            {/* STEP 1: SUMMARY */}
+                            {}
                             {currentStep === 1 && (
                                 <div>
                                     <h2 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '2rem', fontSize: '1.5rem', color: '#002a4d' }}>
                                         <ShoppingBag size={24} color="#1d4ed8" /> Order Summary
                                     </h2>
 
-                                    {/* Redesigned Premium Order Summary Card */}
+                                    {}
                                     <div className="premium-summary-card">
-                                        {/* Product Details Section - Horizontal Layout */}
+                                        {}
                                         <div className="summary-product-details">
                                             <div className="summary-img-container">
                                                 <img
@@ -406,7 +406,7 @@ const Checkout = () => {
                                             </div>
                                         </div>
 
-                                        {/* Trust Badges - Horizontal Layout */}
+                                        {}
                                         <div className="summary-badges">
                                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', color: '#4b5563', fontSize: '0.9rem', fontWeight: 500 }}>
                                                 <div style={{ backgroundColor: '#eff6ff', padding: '0.5rem', borderRadius: '50%' }}>
@@ -435,7 +435,7 @@ const Checkout = () => {
                                 </div>
                             )}
 
-                            {/* STEP 2: DELIVERY */}
+                            {}
                             {currentStep === 2 && (
                                 <div>
                                     <h2 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '2rem', fontSize: '1.5rem', color: '#002a4d' }}>
@@ -478,7 +478,7 @@ const Checkout = () => {
                                 </div>
                             )}
 
-                            {/* STEP 3: CUSTOMIZATION (Only if customizable) */}
+                            {}
                             {currentStep === 3 && product.customizationType !== 'none' && (
                                 <div>
                                     <h2 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem', fontSize: '1.5rem', color: '#002a4d' }}>
@@ -522,7 +522,7 @@ const Checkout = () => {
                                                 </label>
                                             </div>
 
-                                            {/* Image Previews */}
+                                            {}
                                             {customImages.length > 0 && (
                                                 <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem', flexWrap: 'wrap' }}>
                                                     {customImages.map((img, idx) => (
@@ -559,7 +559,7 @@ const Checkout = () => {
                                 </div>
                             )}
 
-                            {/* STEP 4: PAYMENT */}
+                            {}
                             {currentStep === 4 && (
                                 <div>
                                     <h2 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '2rem', fontSize: '1.5rem', color: '#002a4d' }}>

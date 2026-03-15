@@ -9,7 +9,7 @@ export const useWishlist = () => {
 export const WishlistProvider = ({ children }) => {
     const [wishlistItems, setWishlistItems] = useState([]);
 
-    // Load wishlist from local storage on mount
+    
     useEffect(() => {
         const storedWishlist = localStorage.getItem('hasthkala_wishlist');
         if (storedWishlist) {
@@ -21,16 +21,16 @@ export const WishlistProvider = ({ children }) => {
         }
     }, []);
 
-    // Save wishlist to local storage whenever it changes
+    
     useEffect(() => {
         localStorage.setItem('hasthkala_wishlist', JSON.stringify(wishlistItems));
     }, [wishlistItems]);
 
     const addToWishlist = (product) => {
         setWishlistItems((prev) => {
-            // Check if already in wishlist
+            
             const exists = prev.find(item => item._id === product._id);
-            if (exists) return prev; // Don't add duplicates
+            if (exists) return prev; 
 
             return [...prev, product];
         });

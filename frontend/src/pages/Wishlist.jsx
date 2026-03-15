@@ -9,7 +9,7 @@ const Wishlist = () => {
     const navigate = useNavigate();
 
     const handleBuyNow = (product) => {
-        // Direct to checkout
+        
         const defaultSize = product.sizes && product.sizes.length > 0 ? product.sizes[0].label : '';
         navigate('/checkout', {
             state: { product, selectedSize: defaultSize, quantity: 1 }
@@ -116,7 +116,7 @@ const Wishlist = () => {
                                         No Image
                                     </div>
                                 )}
-                                {/* Floating Rating Badge */}
+                                {}
                                 <div style={{
                                     position: 'absolute',
                                     bottom: '10px',

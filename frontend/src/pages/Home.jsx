@@ -12,7 +12,7 @@ const Home = () => {
     const [loading, setLoading] = useState(true);
     const [searchParams, setSearchParams] = useSearchParams();
     
-    // Initialize category directly from searchParams to avoid initial wrong fetch
+    
     const [category, setCategory] = useState(() => {
         const urlCategory = searchParams.get('category');
         return urlCategory || '';
@@ -55,7 +55,7 @@ const Home = () => {
         });
     };
 
-    // Scroll to hash if present
+    
     const location = useLocation();
 
     React.useEffect(() => {
@@ -64,15 +64,15 @@ const Home = () => {
             if (element) {
                 setTimeout(() => {
                     element.scrollIntoView({ behavior: 'smooth' });
-                }, 100); // Small delay to ensure render
+                }, 100); 
             }
         }
     }, [location]);
 
-    // Standard allowed categories
+    
     const allowedCategories = ['Resin Art', 'String Art', 'Mandala Art', 'Portrait', 'Candles', 'Rakhi'];
 
-    // Fetch Categories
+    
     useEffect(() => {
         const fetchCategories = async () => {
             try {
@@ -112,22 +112,22 @@ const Home = () => {
 
     return (
         <div style={{ overflowX: 'hidden' }}>
-            {/* Hero Section - Landing Page Style */}
+            {}
             <div style={{
                 position: 'relative',
-                height: '85vh', // Tall hero
+                height: '85vh', 
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 textAlign: 'center',
                 color: 'white',
-                marginBottom: '0rem', // Reduced margin
+                marginBottom: '0rem', 
                 overflow: 'hidden',
-                borderRadius: '0 0 50px 50px', // Soft curve at bottom
+                borderRadius: '0 0 50px 50px', 
                 boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
-                marginTop: '-2rem' // Pull up to navbar
+                marginTop: '-2rem' 
             }}>
-                {/* Background Image / Fake Video Effect */}
+                {}
                 <motion.div
                     animate={{ scale: [1, 1.05, 1] }}
                     transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
@@ -137,13 +137,13 @@ const Home = () => {
                         left: 0,
                         width: '100%',
                         height: '100%',
-                        backgroundImage: 'url("https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?q=80&w=3432&auto=format&fit=crop")', // Dark Interior/Artistic Vibe
+                        backgroundImage: 'url("https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?q=80&w=3432&auto=format&fit=crop")', 
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
-                        filter: 'brightness(0.35)' // Darken for text readability
+                        filter: 'brightness(0.35)' 
                     }}></motion.div>
 
-                {/* Content */}
+                {}
                 <div style={{ position: 'relative', zIndex: 1, padding: '0 1rem', maxWidth: '900px' }}>
                     <motion.h4
                         initial={{ opacity: 0, y: 20 }}
@@ -197,7 +197,7 @@ const Home = () => {
                     >
                         <button
                             onClick={() => document.getElementById('products-section')?.scrollIntoView({ behavior: 'smooth' })}
-                            className="btn-primary" // Uses index.css class
+                            className="btn-primary" 
                             style={{
                                 padding: '15px 40px',
                                 borderRadius: '30px',
@@ -213,7 +213,7 @@ const Home = () => {
                     </motion.div>
                 </div>
 
-                {/* Scroll Down Indicator */}
+                {}
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
@@ -232,12 +232,12 @@ const Home = () => {
 
             <div id="products-section" className="container" style={{ padding: '2rem 1.5rem', minHeight: '600px' }}>
 
-                {/* Filter & Controls */}
+                {}
                 <div style={{ marginBottom: '1.5rem', display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
                     <h2 style={{ fontSize: '2.5rem', fontFamily: 'var(--font-heading)' }}>Curated For You</h2>
                 </div>
 
-                {/* Interactive Category Bubbles */}
+                {}
                 <div className="category-bubbles" style={{ margin: '-1rem -1.5rem 2rem', padding: '1rem 1.5rem', overflowX: 'auto', WebkitOverflowScrolling: 'touch', textAlign: 'center' }}>
                     <div style={{ display: 'inline-flex', gap: '2.5rem', margin: '0 auto', padding: '0 1rem' }}>
                         <div
@@ -275,7 +275,7 @@ const Home = () => {
                     </div>
                 </div>
 
-                {/* Products Grid */}
+                {}
                 {loading ? (
                     <div style={{ textAlign: 'center', padding: '4rem' }}>Loading masterpieces...</div>
                 ) : (
@@ -312,7 +312,7 @@ const Home = () => {
                                     ) : (
                                         <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#f9f9f9', color: '#ccc' }}>No Image</div>
                                     )}
-                                    {/* Floating Rating Badge */}
+                                    {}
                                     <div style={{
                                         position: 'absolute',
                                         bottom: '10px',
@@ -338,7 +338,7 @@ const Home = () => {
                                         </Link>
                                     </h3>
 
-                                    {/* Removed category rendering if it existed, just title and price as per screenshot */}
+                                    {}
                                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '0.2rem' }}>
                                         <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.8rem' }}>
                                             <span className="product-price-old">₹{Math.round(product.price * 1.25)}</span>
@@ -377,7 +377,7 @@ const Home = () => {
 
 
 
-                {/* How We Work Section */}
+                {}
                 <div id="how-we-work" className="section" style={{ padding: 'clamp(2rem, 5vw, 4rem) 1rem', backgroundColor: '#fcfaf8', position: 'relative', overflow: 'hidden' }}>
                     <div style={{ textAlign: 'center', marginBottom: 'clamp(1rem, 4vw, 2rem)', marginTop: 'clamp(0.5rem, 2vw, 1rem)' }}>
                         <motion.span
@@ -414,7 +414,7 @@ const Home = () => {
                     </div>
 
                     <div style={{ maxWidth: '1100px', margin: '0 auto', position: 'relative' }}>
-                        {/* Desktop Dashed Line */}
+                        {}
                         <div className="process-line"></div>
 
                         <div className="process-grid" style={{
@@ -477,7 +477,7 @@ const Home = () => {
 
 
 
-                {/* About Us Section */}
+                {}
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -504,7 +504,7 @@ const Home = () => {
                     </div>
                 </motion.div>
 
-                {/* Features Info Section */}
+                {}
                 <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     whileInView={{ opacity: 1, scale: 1 }}
@@ -518,10 +518,10 @@ const Home = () => {
                         padding: 'clamp(1rem, 3vw, 1.5rem)',
                         borderRadius: '8px',
                         maxWidth: '1200px',
-                        margin: '0 auto'  /* Removed bottom margin entirely */
+                        margin: '0 auto'  
                     }}
                 >
-                    {/* Delivery */}
+                    {}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -536,7 +536,7 @@ const Home = () => {
                         <p style={{ fontSize: '0.8rem', color: '#888' }}>7-12 Days Delivery</p>
                     </motion.div>
 
-                    {/* Quality */}
+                    {}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -551,7 +551,7 @@ const Home = () => {
                         <p style={{ fontSize: '0.8rem', color: '#888' }}>Handcrafted Excellence</p>
                     </motion.div>
 
-                    {/* Secure Payment */}
+                    {}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -566,7 +566,7 @@ const Home = () => {
                         <p style={{ fontSize: '0.8rem', color: '#888' }}>100% Secure Checkout</p>
                     </motion.div>
 
-                    {/* Support */}
+                    {}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -733,7 +733,7 @@ const Home = () => {
             `}</style>
             </div>
 
-            {/* Floating Custom Order CTA - Hide for Admins */}
+            {}
             {!isAdmin && (
                 <motion.div
                     initial={{ y: 100, opacity: 0 }}

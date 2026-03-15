@@ -9,8 +9,8 @@ import api from '../services/api';
 
 const Navbar = () => {
     const { user, logout, isAdmin } = useAuth();
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // Renamed for clarity
-    const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false); // New state for user dropdown
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); 
+    const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false); 
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [isSearchFocused, setIsSearchFocused] = useState(false);
@@ -53,16 +53,16 @@ const Navbar = () => {
 
     const navLinks = [
         { name: 'Home', path: '/' },
-        // Use React Router's Link with hash, but manual handling might be better if we want smooth scroll without URL flicker issues.
-        // For now, let's try the standard hash link which React Router supports if we add logic.
+        
+        
         { name: 'About Us', path: '/#about-us' },
-        { name: 'Contact Us', path: '/#contact-us' }, // Linked to Footer ID
+        { name: 'Contact Us', path: '/#contact-us' }, 
     ];
 
     if (isAdmin) {
         navLinks.push({ name: 'Dashboard', path: '/admin/dashboard' });
-        // Remove "My account" from main links if admin, or keep it? 
-        // The design shows "My account" as a link. I will add it for everyone logged in.
+        
+        
     }
 
 
@@ -78,16 +78,16 @@ const Navbar = () => {
             borderBottom: '1px solid #f0f0f0'
         }}>
             <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                {/* Logo */}
+                {}
                 <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}>
-                    {/* Placeholder Icon to match the "Leaf" look if wanted, or just text */}
-                    {/* <div style={{ width: '24px', height: '24px', background: 'var(--color-primary)', borderRadius: '4px' }}></div> */}
+                    {}
+                    {}
                     <span style={{ fontFamily: 'var(--font-heading)', fontSize: '1.5rem', fontWeight: 700, letterSpacing: '-0.5px', color: '#333' }}>
                         Hasthkala
                     </span>
                 </Link>
 
-                {/* Search Bar - Center */}
+                {}
                 <div style={{ flex: 1, maxWidth: '400px', margin: '0 2rem', position: 'relative' }} className="desktop-search">
                     <div style={{
                         display: 'flex',
@@ -105,7 +105,7 @@ const Navbar = () => {
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             onFocus={() => setIsSearchFocused(true)}
-                            onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)} // Delay to allow clicking results
+                            onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)} 
                             style={{
                                 border: 'none',
                                 background: 'none',
@@ -118,7 +118,7 @@ const Navbar = () => {
                         />
                     </div>
 
-                    {/* Search Dropdown */}
+                    {}
                     <AnimatePresence>
                         {isSearchFocused && searchQuery.trim().length > 1 && (
                             <motion.div
@@ -182,7 +182,7 @@ const Navbar = () => {
                     </AnimatePresence>
                 </div>
 
-                {/* Desktop Menu - Centered/Right Aligned */}
+                {}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }} className="desktop-menu">
                     {navLinks.map((link) => (
                         <Link
@@ -200,7 +200,7 @@ const Navbar = () => {
                         </Link>
                     ))}
 
-                    {/* My Account Link (Text) */}
+                    {}
                     {user ? (
                         <div style={{ position: 'relative' }}>
                             <button
@@ -220,7 +220,7 @@ const Navbar = () => {
                                 <User size={18} />
                                 <span>My Account</span>
                             </button>
-                            {/* User Dropdown */}
+                            {}
                             {isUserDropdownOpen && (
                                 <div style={{
                                     position: 'absolute',
@@ -255,7 +255,7 @@ const Navbar = () => {
                         </Link>
                     )}
 
-                    {/* Wishlist Icon Only - Not for Admin */}
+                    {}
                     {!isAdmin && (
                         <Link to="/wishlist" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none', color: 'var(--color-primary)', fontWeight: 600 }}>
                             <div style={{ position: 'relative', display: 'flex' }}>
@@ -284,7 +284,7 @@ const Navbar = () => {
                     )}
                 </div>
 
-                {/* Mobile Icons */}
+                {}
                 <div className="mobile-icons" style={{ display: 'none', alignItems: 'center', gap: '1rem' }}>
                     <button onClick={() => { setIsMobileSearchOpen(!isMobileSearchOpen); setIsMobileMenuOpen(false); }} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, display: 'flex', color: 'var(--color-primary)' }}>
                         <Search size={24} />
@@ -295,7 +295,7 @@ const Navbar = () => {
                 </div>
             </div>
 
-            {/* Mobile Search Overlay */}
+            {}
             <AnimatePresence>
                 {isMobileSearchOpen && (
                     <motion.div
@@ -334,7 +334,7 @@ const Navbar = () => {
                                     }}
                                 />
                             </div>
-                            {/* Mobile Search Results */}
+                            {}
                             {searchQuery.trim().length > 1 && searchResults.length > 0 && (
                                 <div style={{ marginTop: '10px', maxHeight: '60vh', overflowY: 'auto' }}>
                                     {searchResults.map((product) => (
@@ -377,7 +377,7 @@ const Navbar = () => {
                 )}
             </AnimatePresence>
 
-            {/* Mobile Menu Overlay */}
+            {}
             <AnimatePresence>
                 {isMobileMenuOpen && (
                     <motion.div

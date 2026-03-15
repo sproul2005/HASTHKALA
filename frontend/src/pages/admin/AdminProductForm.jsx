@@ -19,8 +19,8 @@ const AdminProductForm = () => {
         isTrending: false,
         images: [],
     });
-    const [sizes, setSizes] = useState([{ label: 'Small', price: 0, stock: 0 }]); // Default size
-    const [files, setFiles] = useState([]); // For new uploads
+    const [sizes, setSizes] = useState([{ label: 'Small', price: 0, stock: 0 }]); 
+    const [files, setFiles] = useState([]); 
 
     useEffect(() => {
         if (isEditMode) {
@@ -84,7 +84,7 @@ const AdminProductForm = () => {
         data.append('isTrending', formData.isTrending);
         data.append('sizes', JSON.stringify(sizes));
 
-        // Append new files
+        
         files.forEach(file => {
             data.append('images', file);
         });
@@ -189,7 +189,7 @@ const AdminProductForm = () => {
                     </div>
                 </div>
 
-                {/* SIZES */}
+                {}
                 <div style={{ marginTop: '2rem', padding: '1rem', border: '1px solid #eee' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
                         <label style={{ fontWeight: 600 }}>Sizes & Stock</label>
@@ -206,12 +206,12 @@ const AdminProductForm = () => {
                     ))}
                 </div>
 
-                {/* IMAGES */}
+                {}
                 <div style={{ marginTop: '2rem' }}>
                     <label style={{ display: 'block', marginBottom: '0.5rem' }}>Product Images</label>
                     <input type="file" multiple onChange={handleFileChange} accept="image/*" />
 
-                    {/* Preview Existing */}
+                    {}
                     {isEditMode && formData.images && (
                         <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
                             {formData.images.map(img => (

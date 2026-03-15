@@ -42,7 +42,7 @@ const AdminDashboard = () => {
                 <p style={{ color: 'var(--color-text-light)' }}>Welcome back, here's your store's performance at a glance.</p>
             </div>
 
-            {/* Top Stat Cards */}
+            {}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.5rem' }}>
                 <StatCard title="Total Sales" value={`₹${stats.totalSales.toLocaleString('en-IN')}`} icon={<IndianRupee size={24} color="#fff" />} color="#1a1a1a" />
                 <StatCard title="Total Orders" value={stats.totalOrders} icon={<ShoppingBag size={24} color="#fff" />} color="#4a4a4a" />
@@ -50,10 +50,10 @@ const AdminDashboard = () => {
                 <StatCard title="Registered Users" value={stats.totalUsers} icon={<Users size={24} color="#1a1a1a" />} color="#f0f0f0" textColor="#1a1a1a" />
             </div>
 
-            {/* Charts Section */}
+            {}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '2rem' }}>
 
-                {/* Revenue Line Chart */}
+                {}
                 <div style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '12px', boxShadow: '0 2px 10px rgba(0,0,0,0.05)' }}>
                     <h3 style={{ marginBottom: '1.5rem', fontSize: '1.2rem', fontWeight: 600 }}>Revenue (Last 6 Months)</h3>
                     <div style={{ height: 300, width: '100%' }}>
@@ -72,7 +72,7 @@ const AdminDashboard = () => {
                     </div>
                 </div>
 
-                {/* Category Pie Chart */}
+                {}
                 <div style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '12px', boxShadow: '0 2px 10px rgba(0,0,0,0.05)' }}>
                     <h3 style={{ marginBottom: '1.5rem', fontSize: '1.2rem', fontWeight: 600 }}>Sales by Category</h3>
                     <div style={{ height: 300, width: '100%' }}>
@@ -103,7 +103,7 @@ const AdminDashboard = () => {
                 </div>
             </div>
 
-            {/* Recent Orders Table */}
+            {}
             <div style={{ backgroundColor: 'white', padding: '1.5rem', borderRadius: '12px', boxShadow: '0 2px 10px rgba(0,0,0,0.05)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
                     <h3 style={{ fontSize: '1.2rem', fontWeight: 600 }}>Recent Orders</h3>
@@ -160,7 +160,7 @@ const AdminDashboard = () => {
     );
 };
 
-// Helper Component for Stats
+
 const StatCard = ({ title, value, icon, color, textColor = '#fff' }) => (
     <div style={{
         display: 'flex',

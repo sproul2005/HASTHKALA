@@ -48,7 +48,7 @@ function App() {
                 <Route path="/profile" element={<Profile />} />
                 <Route path="*" element={<h1 className="section container">404: Page Not Found</h1>} />
 
-                {/* Admin Routes */}
+                {}
                 <Route path="/admin" element={<AdminLayout />}>
                   <Route path="dashboard" element={<AdminDashboard />} />
                   <Route path="products" element={<AdminProducts />} />

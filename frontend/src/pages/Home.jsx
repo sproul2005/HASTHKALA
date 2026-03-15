@@ -1,0 +1,778 @@
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
+import { useWishlist } from '../context/WishlistContext';
+import api from '../services/api';
+import { MessageCircle, Sparkles, X, ChevronDown, Package, Settings, PenTool, CheckCircle, Heart, Star } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+
+const Home = () => {
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [searchParams, setSearchParams] = useSearchParams();
+    
+    // Initialize category directly from searchParams to avoid initial wrong fetch
+    const [category, setCategory] = useState(() => {
+        const urlCategory = searchParams.get('category');
+        return urlCategory || '';
+    });
+    
+    const [availableCategories, setAvailableCategories] = useState([]);
+    const { addToCart } = useCart();
+    const { addToWishlist: addProductToWishlist } = useWishlist();
+    const { isAdmin } = useAuth();
+    const navigate = useNavigate();
+    // We still want to sync if URL changes externally (e.g. forward/back buttons)
+    useEffect(() => {
+        const urlCategory = searchParams.get('category');
+        if (urlCategory !== category) {
+             setCategory(urlCategory || '');
+        }
+    }, [searchParams]);
+
+    const handleCategoryClick = (c) => {
+        setCategory(c);
+        if (c === '') {
+            searchParams.delete('category');
+        } else {
+            searchParams.set('category', c);
+        }
+        setSearchParams(searchParams, { replace: true });
+    };
+
+    const handleAddToWishlist = (e, product) => {
+        e.preventDefault();
+        addProductToWishlist(product);
+        alert("Added to Wishlist!");
+    };
+
+    const handleBuyNow = (e, product) => {
+        e.preventDefault();
+        const defaultSize = product.sizes && product.sizes.length > 0 ? product.sizes[0].label : '';
+        navigate('/checkout', {
+            state: { product, selectedSize: defaultSize, quantity: 1 }
+        });
+    };
+
+    // Scroll to hash if present
+    const location = useLocation();
+
+    React.useEffect(() => {
+        if (location.hash) {
+            const element = document.getElementById(location.hash.substring(1));
+            if (element) {
+                setTimeout(() => {
+                    element.scrollIntoView({ behavior: 'smooth' });
+                }, 100); // Small delay to ensure render
+            }
+        }
+    }, [location]);
+
+    // Standard allowed categories
+    const allowedCategories = ['Resin Art', 'String Art', 'Mandala Art', 'Portrait', 'Candles', 'Rakhi'];
+
+    // Fetch Categories
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const { data } = await api.get('/products');
+                const allProducts = data.products || [];
+                const existingCategories = [...new Set(allProducts.map(p => p.category))];
+                const filtered = allowedCategories.filter(c => existingCategories.includes(c));
+                setAvailableCategories(filtered);
+            } catch (error) {
+                console.error("Failed to load categories", error);
+            }
+        };
+        fetchCategories();
+    }, []);
+
+      useEffect(() => {
+        const fetchProducts = async () => {
+            setLoading(true);
+            try {
+
+                let query = '/products?limit=8';
+                if (category) {
+                    query += `&category=${category}`;
+                }
+
+
+                const { data } = await api.get(query);
+                setProducts(data.products || []);
+            } catch (error) {
+                console.error("Failed to fetch products", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchProducts();
+    }, [category]);
+
+    return (
+        <div style={{ overflowX: 'hidden' }}>
+            {/* Hero Section - Landing Page Style */}
+            <div style={{
+                position: 'relative',
+                height: '85vh', // Tall hero
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                textAlign: 'center',
+                color: 'white',
+                marginBottom: '0rem', // Reduced margin
+                overflow: 'hidden',
+                borderRadius: '0 0 50px 50px', // Soft curve at bottom
+                boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
+                marginTop: '-2rem' // Pull up to navbar
+            }}>
+                {/* Background Image / Fake Video Effect */}
+                <motion.div
+                    animate={{ scale: [1, 1.05, 1] }}
+                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                    style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        backgroundImage: 'url("https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?q=80&w=3432&auto=format&fit=crop")', // Dark Interior/Artistic Vibe
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        filter: 'brightness(0.35)' // Darken for text readability
+                    }}></motion.div>
+
+                {/* Content */}
+                <div style={{ position: 'relative', zIndex: 1, padding: '0 1rem', maxWidth: '900px' }}>
+                    <motion.h4
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2 }}
+                        style={{
+                            textTransform: 'uppercase',
+                            letterSpacing: '3px',
+                            fontSize: '1rem',
+                            marginBottom: '1rem',
+                            color: '#e0e0e0'
+                        }}
+                    >
+                        Handcrafted Excellence
+                    </motion.h4>
+                    <motion.h1
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.4 }}
+                        style={{
+                            fontSize: 'clamp(2.5rem, 5vw, 4.5rem)',
+                            fontFamily: 'var(--font-heading)',
+                            lineHeight: '1.2',
+                            marginBottom: '1.5rem',
+                            fontWeight: 400
+                        }}
+                    >
+                        Make Your Interior More <br />
+                        <span style={{ fontStyle: 'italic', fontWeight: 600 }}>Artistic & Soulful</span>
+                    </motion.h1>
+                    <motion.p
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.6 }}
+                        style={{
+                            fontSize: '1.1rem',
+                            maxWidth: '600px',
+                            margin: '0 auto 2.5rem',
+                            color: '#ddd',
+                            lineHeight: '1.6'
+                        }}
+                    >
+                        Turn your room into a sanctuary with our unique handcrafted masterpieces.
+                        Modern elegance meets traditional craftsmanship.
+                    </motion.p>
+
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.8 }}
+                    >
+                        <button
+                            onClick={() => document.getElementById('products-section')?.scrollIntoView({ behavior: 'smooth' })}
+                            className="btn-primary" // Uses index.css class
+                            style={{
+                                padding: '15px 40px',
+                                borderRadius: '30px',
+                                fontSize: '1rem',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '10px'
+                            }}
+                        >
+                            Explore Collection
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        </button>
+                    </motion.div>
+                </div>
+
+                {/* Scroll Down Indicator */}
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 1.2, duration: 1 }}
+                    style={{ position: 'absolute', bottom: '30px', left: '50%', transform: 'translateX(-50%)' }}
+                >
+                    <div style={{ width: '30px', height: '50px', border: '2px solid rgba(255,255,255,0.3)', borderRadius: '15px', display: 'flex', justifyContent: 'center', paddingTop: '10px' }}>
+                        <motion.div
+                            animate={{ y: [0, 15, 0] }}
+                            transition={{ repeat: Infinity, duration: 1.5 }}
+                            style={{ width: '4px', height: '4px', background: 'white', borderRadius: '50%' }}
+                        />
+                    </div>
+                </motion.div>
+            </div>
+
+            <div id="products-section" className="container" style={{ padding: '2rem 1.5rem', minHeight: '600px' }}>
+
+                {/* Filter & Controls */}
+                <div style={{ marginBottom: '1.5rem', display: 'flex', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
+                    <h2 style={{ fontSize: '2.5rem', fontFamily: 'var(--font-heading)' }}>Curated For You</h2>
+                </div>
+
+                {/* Interactive Category Bubbles */}
+                <div className="category-bubbles" style={{ margin: '-1rem -1.5rem 2rem', padding: '1rem 1.5rem', overflowX: 'auto', WebkitOverflowScrolling: 'touch', textAlign: 'center' }}>
+                    <div style={{ display: 'inline-flex', gap: '2.5rem', margin: '0 auto', padding: '0 1rem' }}>
+                        <div
+                            onClick={() => handleCategoryClick('')}
+                            style={{
+                                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', cursor: 'pointer',
+                                opacity: category === '' ? 1 : 0.6,
+                                transform: category === '' ? 'scale(1.05)' : 'scale(1)',
+                                transition: 'all 0.3s'
+                            }}>
+                            <div style={{ width: '70px', height: '70px', borderRadius: '50%', backgroundColor: 'var(--color-surface)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: category === '' ? '0 0 0 2px var(--color-primary)' : '0 2px 10px rgba(0,0,0,0.05)' }}>
+                                <Sparkles size={24} color="var(--color-primary)" />
+                            </div>
+                            <span style={{ fontSize: '0.85rem', fontWeight: category === '' ? 600 : 400 }}>Featured</span>
+                        </div>
+                        {availableCategories.map(c => (
+                            <div
+                                key={c}
+                                onClick={() => handleCategoryClick(c)}
+                                style={{
+                                    display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', cursor: 'pointer',
+                                    opacity: category === c ? 1 : 0.6,
+                                    transform: category === c ? 'scale(1.05)' : 'scale(1)',
+                                    transition: 'all 0.3s'
+                                }}>
+                                <div style={{
+                                    width: '70px', height: '70px', borderRadius: '50%',
+                                    backgroundImage: `url(https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=200&q=80)`,
+                                    backgroundSize: 'cover',
+                                    boxShadow: category === c ? '0 0 0 2px var(--color-primary)' : '0 2px 10px rgba(0,0,0,0.05)'
+                                }}></div>
+                                <span style={{ fontSize: '0.85rem', fontWeight: category === c ? 600 : 400 }}>{c}</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Products Grid */}
+                {loading ? (
+                    <div style={{ textAlign: 'center', padding: '4rem' }}>Loading masterpieces...</div>
+                ) : (
+                    <div className="product-grid" style={{
+                        display: 'grid'
+                    }}>
+                        {products.map((product) => (
+                            <motion.div
+                                key={product._id}
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ duration: 0.5 }}
+                                style={{
+                                    border: '1px solid #f0f0f0',
+                                    borderRadius: '12px',
+                                    overflow: 'hidden',
+                                    backgroundColor: 'white',
+                                    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                                    display: 'flex',
+                                    flexDirection: 'column'
+                                }}
+                                whileHover={{ y: -5, boxShadow: '0 10px 20px rgba(0,0,0,0.08)' }}
+                            >
+                                <Link to={`/product/${product._id}`} state={{ fromCategory: category }} className="product-img-link" style={{ display: 'block', overflow: 'hidden', position: 'relative' }}>
+                                    {product.images && product.images.length > 0 ? (
+                                        <img
+                                            src={product.images[0].url}
+                                            alt={product.name}
+                                            referrerPolicy="no-referrer"
+                                            style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }}
+                                            onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+                                            onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                                        />
+                                    ) : (
+                                        <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#f9f9f9', color: '#ccc' }}>No Image</div>
+                                    )}
+                                    {/* Floating Rating Badge */}
+                                    <div style={{
+                                        position: 'absolute',
+                                        bottom: '10px',
+                                        right: '10px',
+                                        backgroundColor: '#eff6ff',
+                                        padding: '4px 12px',
+                                        borderRadius: '20px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '6px',
+                                        boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                                        border: '1px solid #bfdbfe'
+                                    }}>
+                                        <Star size={16} fill="#fbbf24" color="#fbbf24" />
+                                        <span style={{ fontWeight: 700, color: '#1e3a8a', fontSize: '0.9rem' }}>{Math.round(product.averageRating || 4)}</span>
+                                    </div>
+                                </Link>
+
+                                <div className="product-info" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                                    <h3 className="product-title">
+                                        <Link to={`/product/${product._id}`} state={{ fromCategory: category }} style={{ textDecoration: 'none', color: 'inherit' }}>
+                                            {product.name}
+                                        </Link>
+                                    </h3>
+
+                                    {/* Removed category rendering if it existed, just title and price as per screenshot */}
+                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '0.2rem' }}>
+                                        <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.8rem' }}>
+                                            <span className="product-price-old">₹{Math.round(product.price * 1.25)}</span>
+                                            <span className="product-price-new">₹{product.price}</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="product-actions">
+                                        <button
+                                            onClick={(e) => handleBuyNow(e, product)}
+                                            className="buy-now-btn"
+                                        >
+                                            BUY NOW
+                                        </button>
+                                        <button
+                                            onClick={(e) => handleAddToWishlist(e, product)}
+                                            className="wishlist-btn"
+                                            onMouseOver={(e) => {
+                                                e.currentTarget.style.backgroundColor = '#f5f5f5';
+                                            }}
+                                            onMouseOut={(e) => {
+                                                e.currentTarget.style.backgroundColor = 'transparent';
+                                            }}
+                                        >
+                                            <Heart size={16} /> <span className="wishlist-text">WISHLIST</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </div>
+                )}
+                {!loading && products.length === 0 && (
+                    <p style={{ textAlign: 'center', marginTop: '4rem' }}>No products found.</p>
+                )}
+
+
+
+                {/* How We Work Section */}
+                <div id="how-we-work" className="section" style={{ padding: 'clamp(2rem, 5vw, 4rem) 1rem', backgroundColor: '#fcfaf8', position: 'relative', overflow: 'hidden' }}>
+                    <div style={{ textAlign: 'center', marginBottom: 'clamp(1rem, 4vw, 2rem)', marginTop: 'clamp(0.5rem, 2vw, 1rem)' }}>
+                        <motion.span
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            style={{
+                                textTransform: 'uppercase',
+                                letterSpacing: '2px',
+                                color: '#666',
+                                fontSize: '0.85rem',
+                                fontWeight: 600,
+                                display: 'inline-block',
+                                marginBottom: '0.5rem'
+                            }}>
+                            Our Process
+                        </motion.span>
+                        <motion.h2
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.1 }}
+                            style={{ fontSize: 'clamp(2.5rem, 4vw, 3.5rem)', fontFamily: 'var(--font-heading)', color: '#1a1a1a', marginBottom: '0.5rem' }}>
+                            How We <span style={{ fontStyle: 'italic', fontWeight: 300 }}>Work</span>
+                        </motion.h2>
+                        <motion.p
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.2 }}
+                            style={{ color: '#666', fontSize: '1.1rem', maxWidth: '600px', margin: '0 auto', lineHeight: '1.6' }}>
+                            From your creative vision to your doorstep, we make the journey of acquiring art seamless and magical.
+                        </motion.p>
+                    </div>
+
+                    <div style={{ maxWidth: '1100px', margin: '0 auto', position: 'relative' }}>
+                        {/* Desktop Dashed Line */}
+                        <div className="process-line"></div>
+
+                        <div className="process-grid" style={{
+                            display: 'grid',
+                            gap: '2rem',
+                            position: 'relative',
+                            zIndex: 1
+                        }}>
+                            {[
+                                { id: '01', title: 'Choose', desc: 'Browse our exclusive collection to find the perfect piece.', icon: <Package strokeWidth={1.5} size={28} /> },
+                                { id: '02', title: 'Customize', desc: 'Share your personal preferences, details, and vision.', icon: <Settings strokeWidth={1.5} size={28} /> },
+                                { id: '03', title: 'Create', desc: 'We carefully handcraft your masterpiece with love.', icon: <PenTool strokeWidth={1.5} size={28} /> },
+                                { id: '04', title: 'Deliver', desc: 'Fast, secure, and pristine delivery to your doorstep.', icon: <CheckCircle strokeWidth={1.5} size={28} /> }
+                            ].map((step, index) => (
+                                <motion.div
+                                    key={step.id}
+                                    initial={{ opacity: 0, y: 40 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: index * 0.15, duration: 0.6, ease: "easeOut" }}
+                                    style={{ textAlign: 'center', position: 'relative' }}
+                                >
+                                    <div style={{
+                                        color: '#e5e5e5',
+                                        fontSize: 'clamp(2.5rem, 6vw, 3.5rem)',
+                                        fontWeight: 300,
+                                        fontFamily: 'var(--font-heading)',
+                                        lineHeight: 1,
+                                        marginBottom: 'clamp(-1rem, -2vw, -1.5rem)',
+                                        position: 'relative',
+                                        zIndex: 0
+                                    }}>{step.id}</div>
+
+                                    <div className="process-icon-container" style={{
+                                        width: 'clamp(60px, 10vw, 80px)',
+                                        height: 'clamp(60px, 10vw, 80px)',
+                                        backgroundColor: 'white',
+                                        borderRadius: '50%',
+                                        margin: '0 auto clamp(0.5rem, 2vw, 1rem)',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        boxShadow: '0 10px 30px rgba(0,0,0,0.06)',
+                                        border: '1px solid #f0f0f0',
+                                        color: '#1a1a1a',
+                                        position: 'relative',
+                                        zIndex: 1,
+                                        transition: 'all 0.4s ease'
+                                    }}>
+                                        {step.icon}
+                                    </div>
+
+                                    <h3 style={{ fontSize: '1.3rem', fontWeight: 500, marginBottom: '0.4rem', color: '#1a1a1a', fontFamily: 'var(--font-heading)' }}>{step.title}</h3>
+                                    <p style={{ fontSize: '0.95rem', color: '#666', lineHeight: '1.5', padding: '0 10px', margin: 0 }}>{step.desc}</p>
+                                </motion.div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+
+
+                {/* About Us Section */}
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-50px" }}
+                    transition={{ duration: 0.6, ease: "easeOut" }}
+                    id="about-us" className="section" style={{ textAlign: 'center', padding: 'clamp(2rem, 6vw, 4rem) 1rem', borderTop: '1px solid #eee' }}
+                >
+                    <h2 style={{ fontSize: 'clamp(2rem, 5vw, 2.5rem)', marginBottom: 'clamp(1rem, 3vw, 1.5rem)', fontFamily: 'var(--font-heading)' }}>Our Story</h2>
+                    <div style={{ maxWidth: '800px', margin: '0 auto', lineHeight: '1.8', fontSize: 'clamp(1rem, 2vw, 1.1rem)', color: '#444' }}>
+                        <p style={{ marginBottom: 'clamp(1rem, 3vw, 1.5rem)' }}>
+                            Welcome to <strong>Hasthkala</strong>, where tradition meets contemporary elegance.
+                            Born from a passion for handcrafted artistry, we curate a collection of unique, soulful items that tell a story.
+                        </p>
+                        <p style={{ marginBottom: 'clamp(1rem, 3vw, 1.5rem)' }}>
+                            Our artisans pour their heart into every creation—from intricate Resin Art to delicate String Art and personalized portraits.
+                            We believe that every home deserves a touch of warmth and every gift should carry a piece of your heart.
+                        </p>
+                        <p>
+                            Thank you for supporting handmade. Thank you for choosing quality, authenticity, and love.
+                        </p>
+                        <div style={{ marginTop: 'clamp(1.5rem, 4vw, 2rem)', display: 'flex', justifyContent: 'center', gap: '1rem' }}>
+                            <span style={{ height: '2px', width: '50px', background: 'var(--color-secondary)' }}></span>
+                        </div>
+                    </div>
+                </motion.div>
+
+                {/* Features Info Section */}
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true, margin: "-50px" }}
+                    transition={{ duration: 0.6, ease: "easeOut" }}
+                    style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
+                        gap: 'clamp(0.5rem, 2vw, 1rem)',
+                        backgroundColor: 'var(--color-surface)',
+                        padding: 'clamp(1rem, 3vw, 1.5rem)',
+                        borderRadius: '8px',
+                        maxWidth: '1200px',
+                        margin: '0 auto'  /* Removed bottom margin entirely */
+                    }}
+                >
+                    {/* Delivery */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-20px" }}
+                        transition={{ delay: 0.1, duration: 0.5 }}
+                        style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.4rem' }}
+                    >
+                        <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 5px rgba(0,0,0,0.05)' }}>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+                        </div>
+                        <h3 style={{ fontSize: '0.9rem', fontWeight: 600, fontFamily: 'var(--font-heading)' }}>Standard Delivery</h3>
+                        <p style={{ fontSize: '0.8rem', color: '#888' }}>7-12 Days Delivery</p>
+                    </motion.div>
+
+                    {/* Quality */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-20px" }}
+                        transition={{ delay: 0.2, duration: 0.5 }}
+                        style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.4rem' }}
+                    >
+                        <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 5px rgba(0,0,0,0.05)' }}>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+                        </div>
+                        <h3 style={{ fontSize: '0.9rem', fontWeight: 600, fontFamily: 'var(--font-heading)' }}>Premium Quality</h3>
+                        <p style={{ fontSize: '0.8rem', color: '#888' }}>Handcrafted Excellence</p>
+                    </motion.div>
+
+                    {/* Secure Payment */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-20px" }}
+                        transition={{ delay: 0.3, duration: 0.5 }}
+                        style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.4rem' }}
+                    >
+                        <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 5px rgba(0,0,0,0.05)' }}>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                        </div>
+                        <h3 style={{ fontSize: '0.9rem', fontWeight: 600, fontFamily: 'var(--font-heading)' }}>Secure Payment</h3>
+                        <p style={{ fontSize: '0.8rem', color: '#888' }}>100% Secure Checkout</p>
+                    </motion.div>
+
+                    {/* Support */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-20px" }}
+                        transition={{ delay: 0.4, duration: 0.5 }}
+                        style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.4rem' }}
+                    >
+                        <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 5px rgba(0,0,0,0.05)' }}>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                        </div>
+                        <h3 style={{ fontSize: '0.9rem', fontWeight: 600, fontFamily: 'var(--font-heading)' }}>24/7 Support</h3>
+                        <p style={{ fontSize: '0.8rem', color: '#888' }}>We're here to help</p>
+                    </motion.div>
+                </motion.div>
+
+                <style>{`
+                /* Process Grid */
+                .process-grid {
+                    grid-template-columns: 1fr;
+                }
+                .process-line {
+                    display: none;
+                }
+                .process-icon-container:hover {
+                    transform: translateY(-10px);
+                    box-shadow: 0 15px 35px rgba(0,0,0,0.1) !important;
+                    background-color: #1a1a1a !important;
+                    color: white !important;
+                }
+                
+                @media (min-width: 600px) {
+                    .process-grid {
+                        grid-template-columns: repeat(2, 1fr);
+                    }
+                }
+                
+                @media (min-width: 1024px) {
+                    .process-grid {
+                        grid-template-columns: repeat(4, 1fr);
+                    }
+                    .process-line {
+                        display: block;
+                        position: absolute;
+                        top: 85px;
+                        left: 10%;
+                        width: 80%;
+                        height: 1px;
+                        border-top: 1px dashed #d0d0d0;
+                        z-index: 0;
+                    }
+                }
+
+                @media (min-width: 768px) {
+                    .desktop-only { display: inline-block !important; }
+                    .mobile-toggle-btn { display: none !important; }
+                }
+                
+                /* Hide scrollbar for category bubbles but keep functionality */
+                .category-bubbles::-webkit-scrollbar {
+                    display: none;
+                }
+                .category-bubbles {
+                    -ms-overflow-style: none;
+                    scrollbar-width: none;
+                }
+                
+                .product-info {
+                    padding: 0.8rem;
+                    gap: 0.3rem;
+                }
+                .product-title {
+                    font-size: 0.9rem;
+                    font-weight: 600;
+                    color: #001a4d;
+                    margin: 0;
+                    font-family: var(--font-heading);
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+                .product-price-old {
+                    font-size: 0.8rem;
+                    color: #9ca3af;
+                    text-decoration: line-through;
+                    font-weight: 500;
+                }
+                .product-price-new {
+                    font-size: 1rem;
+                    font-weight: 800;
+                    color: #3b82f6;
+                    letter-spacing: -0.5px;
+                }
+                .product-actions {
+                    display: flex;
+                    gap: 5px;
+                    margin-top: 0.5rem;
+                }
+                .buy-now-btn {
+                    flex: 1;
+                    padding: 8px 5px;
+                    border-radius: 6px;
+                    font-size: 0.8rem;
+                    font-weight: 600;
+                    cursor: pointer;
+                    border: none;
+                    background-color: #1a1a1a;
+                    color: white;
+                    text-transform: uppercase;
+                }
+                .wishlist-btn {
+                    width: 35px;
+                    height: 35px;
+                    padding: 0;
+                    border-radius: 6px;
+                    font-size: 0.8rem;
+                    font-weight: 600;
+                    cursor: pointer;
+                    border: 1px solid #1a1a1a;
+                    background-color: transparent;
+                    color: #1a1a1a;
+                    transition: all 0.2s;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+                .wishlist-text {
+                    display: none;
+                }
+                .product-img-link {
+                    height: 160px;
+                }
+
+                @media (min-width: 600px) {
+                    .product-info { padding: 1rem; gap: 0.4rem; }
+                    .product-title { font-size: 1.2rem; -webkit-line-clamp: unset; white-space: nowrap; }
+                    .product-price-old { font-size: 1rem; }
+                    .product-price-new { font-size: 1.4rem; }
+                    .product-actions { gap: 10px; margin-top: auto; }
+                    .buy-now-btn { padding: 10px; font-size: 0.9rem; }
+                    .wishlist-btn { width: auto; height: auto; flex: 1; padding: 10px; font-size: 0.9rem; gap: 5px; }
+                    .wishlist-text { display: inline; text-transform: uppercase; font-weight: 600; font-size: 0.9rem; }
+                    .product-img-link { height: 250px; }
+                }
+
+                /* Product Grid Layout */
+                .product-grid {
+                    grid-template-columns: repeat(2, 1fr); /* Mobile: 2 columns */
+                    gap: 12px;
+                }
+                @media (min-width: 600px) {
+                    .product-grid {
+                        grid-template-columns: repeat(2, 1fr); /* Tablet: 2 columns */
+                        gap: 2rem;
+                    }
+                }
+                @media (min-width: 1024px) {
+                    .product-grid {
+                        grid-template-columns: repeat(4, 1fr); /* Desktop: 4 columns strictly */
+                        gap: 2rem;
+                    }
+                }
+            `}</style>
+            </div>
+
+            {/* Floating Custom Order CTA - Hide for Admins */}
+            {!isAdmin && (
+                <motion.div
+                    initial={{ y: 100, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 2 }}
+                    style={{
+                        position: 'fixed',
+                        bottom: '30px',
+                        right: '30px',
+                        zIndex: 1000,
+                    }}
+                >
+                    <button
+                        onClick={() => document.getElementById('products-section')?.scrollIntoView({ behavior: 'smooth' })}
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '10px',
+                            backgroundColor: 'rgba(255, 255, 255, 0.85)',
+                            backdropFilter: 'blur(10px)',
+                            padding: '12px 24px',
+                            borderRadius: '50px',
+                            boxShadow: '0 8px 32px rgba(0,0,0,0.15)',
+                            border: '1px solid rgba(255,255,255,0.4)',
+                            color: 'var(--color-primary)',
+                            fontWeight: 600,
+                            cursor: 'pointer',
+                            transition: 'transform 0.3s'
+                        }}
+                        onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+                        onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                    >
+                        <MessageCircle size={20} />
+                        ✨ Custom Order
+                    </button>
+                </motion.div>
+            )}
+        </div>
+    );
+};
+
+export default Home;
